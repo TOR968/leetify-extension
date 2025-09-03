@@ -1,0 +1,7 @@
+{
+	"$schema": "https://raw.githubusercontent.com/SteamClientHomebrew/Millennium/main/src/sys/plugin-schema.json",
+	"name": "leetify-extension",
+	"common_name": "Leetify Extension",
+	"description": "A Millennium plugin that adds Leetify integration to Steam profiles.",
+	"version": "1.0.0"
+}
