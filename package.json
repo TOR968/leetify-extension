@@ -1,38 +1,38 @@
 {
-	"scripts": {
-		"dev": "millennium-ttc --build dev",
-		"watch": "nodemon --watch webkit --watch frontend --ext ts,tsx,js,jsx --exec \"millennium-ttc --build dev\"",
-		"build": "millennium-ttc --build prod",
-		"sync-version": "npx tsx scripts/sync-version.ts 1.0.0",
-		"release": "npx tsx scripts/build-plugin.ts 1.0.0"
-	},
-	"devDependencies": {
-		"@semantic-release/changelog": "^6.0.3",
-		"@semantic-release/commit-analyzer": "^11.1.0",
-		"@semantic-release/exec": "^6.0.3",
-		"@semantic-release/git": "^10.0.1",
-		"@semantic-release/github": "^9.2.6",
-		"@semantic-release/release-notes-generator": "^12.1.0",
-		"@types/react": "^19.1.12",
-		"@types/react-dom": "^19.1.8",
-		"@types/node": "^20.11.0",
-		"archiver": "^6.0.0",
-		"nodemon": "^3.1.9",
-		"semantic-release": "^22.0.12",
-		"tsx": "^4.7.0",
-		"typescript": "^5.3.0"
-	},
-	"type": "module",
-	"name": "leetify-extension",
-	"version": "1.0.0",
-	"description": "A Millennium plugin that adds Leetify integration to Steam profiles",
-	"main": "./frontend/index.tsx",
-	"author": "Leetify Extension Team",
-	"license": "MIT",
-	"dependencies": {
-		"@steambrew/api": "^5.5.3",
-		"@steambrew/client": "^5.5.3",
-		"@steambrew/ttc": "^2.7.3",
-		"@steambrew/webkit": "^5.5.3"
-	}
+  "scripts": {
+    "dev": "millennium-ttc --build dev",
+    "watch": "nodemon --watch webkit --watch frontend --ext ts,tsx,js,jsx --exec \"millennium-ttc --build dev\"",
+    "build": "millennium-ttc --build prod",
+    "sync-version": "npx tsx scripts/sync-version.ts 1.0.0",
+    "release": "npx tsx scripts/build-plugin.ts 1.0.0"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^11.1.0",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^9.2.6",
+    "@semantic-release/release-notes-generator": "^12.1.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.8",
+    "@types/node": "^20.11.0",
+    "archiver": "^6.0.0",
+    "nodemon": "^3.1.9",
+    "semantic-release": "^22.0.12",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  },
+  "type": "module",
+  "name": "leetify-extension",
+  "version": "1.0.0",
+  "description": "A Millennium plugin that adds Leetify integration to Steam profiles",
+  "main": "./frontend/index.tsx",
+  "author": "Leetify Extension Team",
+  "license": "MIT",
+  "dependencies": {
+    "@steambrew/api": "^5.5.3",
+    "@steambrew/client": "^5.5.3",
+    "@steambrew/ttc": "^2.7.3",
+    "@steambrew/webkit": "^5.5.3"
+  }
 }
