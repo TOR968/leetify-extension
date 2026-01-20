@@ -2,7 +2,8 @@
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
 		"jsxFactory": "window.SP_REACT.createElement",
-		"jsxFragmentFactory": "window.SP_REACT.Fragment"
+		"jsxFragmentFactory": "window.SP_REACT.Fragment",
+		"types": ["react", "react-dom"]
 	},
 	"include": ["."],
 	"exclude": ["node_modules", "../webkit"]

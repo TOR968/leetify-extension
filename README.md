@@ -53,16 +53,6 @@ npm install -g pnpm
 pnpm install
 ```
 
-**Install Python dependencies:**
-
-```bash
-# Windows
-pip install -r requirements.txt
-
-# Linux/macOS
-pip3 install -r requirements.txt
-```
-
 #### Step 3: Build the Plugin
 
 **For development:**

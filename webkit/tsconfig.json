@@ -2,8 +2,11 @@
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
 		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true
+		"allowSyntheticDefaultImports": true,
+		"jsxFactory": "window.SP_REACT.createElement",
+		"jsxFragmentFactory": "window.SP_REACT.Fragment",
+		"types": ["react", "react-dom"]
 	},
-	"include": ["."],
+	"include": [".", "../frontend/leetify.tsx"],
 	"exclude": ["node_modules", "../frontend"]
 }
