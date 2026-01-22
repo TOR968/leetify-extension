@@ -13,6 +13,11 @@ Before installing this plugin, ensure you have:
 ![Example](./assets/images/example.png)
 ![ExampleGif](./assets/gifs/example.gif)
 
+> **⚠️ Only with a valid [Leetify API key](https://leetify.com/app/developer) will you see statistics.**
+
+![Stats](./assets/images/stats.png)
+![Example of a Leetify profile with statistics.](<assets/gifs/stat example.gif>)
+
 ---
 
 ## 🚀 Installation Guide
@@ -31,6 +36,11 @@ Before installing this plugin, ensure you have:
     - Paste the Plugin ID into the installer
     - Click **Install**
     - Restart Steam when prompted
+    - Add [Leetfy API key](https://leetify.com/app/developer) to the plugin settings to enable full functionality
+      - Go to **Millennium Library Manager** → **Leetify Extension**
+      - ![Paste your Leetify API key into the field](assets/images/api-key.png)
+      - Click **Save**
+      - Restart Steam once more
 
 ### Method 2: Build from Source
 
@@ -46,9 +56,6 @@ cd leetify-extension
 **Install Node.js dependencies:**
 
 ```bash
-# Install pnpm if you haven't already
-npm install -g pnpm
-
 # Install project dependencies
 pnpm install
 ```
@@ -81,24 +88,6 @@ cp -r . ~/.local/share/millennium/plugins/leetify-extension
 # macOS
 cp -r . ~/Library/Application\ Support/millennium/plugins/leetify-extension
 ```
-
-**Option B: Create symbolic link (for development)**
-
-```bash
-# Windows (run as Administrator)
-mklink /D "C:\Program Files (x86)\Steam\plugins\leetify-extension" "%CD%"
-
-# Linux/macOS
-ln -s "$(pwd)" ~/.local/share/millennium/plugins/leetify-extension
-```
-
-#### Step 5: Enable Plugin in Steam
-
-1. Completely close Steam (including system tray)
-2. Restart Steam
-3. Go to **Millennium** → **Plugins**
-4. Enable "Leetify Extension"
-5. Restart Steam once more
 
 ---
 

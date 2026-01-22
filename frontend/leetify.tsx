@@ -1,22 +1,12 @@
 import { Millennium } from '@steambrew/webkit';
+import { createRoot } from 'react-dom/client';
 import { LeetifyButton } from './leetify-button';
-
-type ReactRoot = {
-	render: (element: unknown) => void;
-};
-
-type ReactBridge = {
-	createElement: (type: unknown, props?: Record<string, unknown> | null, ...children: unknown[]) => unknown;
-};
-
-type ReactDomBridge = {
-	render?: (element: unknown, container: Element) => void;
-	createRoot?: (container: Element) => ReactRoot;
-};
+import { LeetifyStats } from './leetify-stats';
 
 const CONTAINER_CLASS = 'leetify-extension-container';
 const PROFILE_URL_PATTERN = /steamcommunity\.com\/(id|profiles)\//;
 const STYLE_ID = 'leetify-extension-style';
+const STEAMID64_BASE = 76561197960265728n;
 
 const buttonStyles = `
 .leetify-btn {
@@ -76,18 +66,49 @@ function normalizeProfileXmlUrl(href: string): string | null {
 	return `${base}/?xml=1`;
 }
 
+function getSteamIdFromPage(): string | null {
+	const anyWindow = window as any;
+	const candidates = [anyWindow?.g_steamID, anyWindow?.g_rgProfileData?.steamid, anyWindow?.g_rgProfileData?.steamid64];
+	for (const value of candidates) {
+		if (typeof value === 'string' && value !== '0' && value.trim()) {
+			console.info('Leetify: SteamID from page globals');
+			return value.trim();
+		}
+	}
+	const miniprofileId = document.querySelector('[data-miniprofile]')?.getAttribute('data-miniprofile');
+	if (miniprofileId && miniprofileId !== '0') {
+		const steamId = toSteamId64FromAccountId(miniprofileId);
+		if (steamId) {
+			console.info('Leetify: SteamID from data-miniprofile');
+			return steamId;
+		}
+	}
+	return null;
+}
+
+function toSteamId64FromAccountId(accountId: string): string | null {
+	try {
+		const id = BigInt(accountId);
+		if (id <= 0n) return null;
+		return (STEAMID64_BASE + id).toString();
+	} catch {
+		return null;
+	}
+}
+
 async function fetchSteamId(profileUrl: string): Promise<string | null> {
 	let profileResponse: Response;
 	try {
+		console.info('Leetify: Fetching profile XML', profileUrl);
 		profileResponse = await fetch(profileUrl);
 	} catch (error) {
 		console.error('Leetify: Failed to fetch profile data', error);
-		return null;
+		return getSteamIdFromPage();
 	}
 
 	if (!profileResponse.ok) {
 		console.error(`Leetify: Failed to fetch profile data: ${profileResponse.status} ${profileResponse.statusText}`);
-		return null;
+		return getSteamIdFromPage();
 	}
 
 	const profileXmlText = await profileResponse.text();
@@ -97,17 +118,40 @@ async function fetchSteamId(profileUrl: string): Promise<string | null> {
 	const steamId = profileXmlDoc.querySelector('steamID64')?.textContent || '0';
 	if (!steamId || steamId === '0') {
 		console.error('Leetify: Could not parse steamID64 from profile');
-		return null;
+		return getSteamIdFromPage();
 	}
 
+	console.info('Leetify: SteamID from profile XML');
 	return steamId;
 }
 
-function renderButton(container: Element, steamId: string) {
-	const react = (window as unknown as { SP_REACT?: ReactBridge }).SP_REACT;
-	const reactDom = (window as unknown as { SP_REACTDOM?: ReactDomBridge }).SP_REACTDOM;
+async function resolveSteamId(profileUrl: string): Promise<string | null> {
+	const primary = await fetchSteamId(profileUrl);
+	if (primary) {
+		return primary;
+	}
 
-	if (!react || !reactDom) {
+	const delays = [200, 500, 1000];
+	for (const delay of delays) {
+		console.info('Leetify: Retrying SteamID resolution', delay);
+		await new Promise<void>((resolve) => setTimeout(resolve, delay));
+		const retry = getSteamIdFromPage();
+		if (retry) {
+			console.info('Leetify: SteamID resolved after retry');
+			return retry;
+		}
+	}
+
+	return null;
+}
+
+function renderButton(container: Element, steamId: string) {
+	try {
+		const root = createRoot(container);
+		root.render(<LeetifyButton steamId={steamId} />);
+	} catch (error) {
+		console.error('Leetify: Failed to render button with React', error);
+
 		const fallbackButton = document.createElement('button');
 		fallbackButton.className = 'leetify-btn';
 		fallbackButton.type = 'button';
@@ -116,29 +160,22 @@ function renderButton(container: Element, steamId: string) {
 			window.location.href = `https://leetify.com/public/profile/${steamId}`;
 		});
 		container.appendChild(fallbackButton);
-		return;
 	}
+}
 
-	const element = react.createElement(LeetifyButton, { steamId });
+function renderStats(container: Element, steamId: string) {
+	try {
+		const root = createRoot(container);
+		root.render(<LeetifyStats steamId={steamId} />);
+	} catch (error) {
+		console.error('Leetify: Failed to render stats with React', error);
 
-	if (reactDom?.createRoot) {
-		reactDom.createRoot(container).render(element);
-		return;
+		const errorDiv = document.createElement('div');
+		errorDiv.style.padding = '10px';
+		errorDiv.style.color = 'red';
+		errorDiv.textContent = 'Leetify Extension Error: Failed to render stats.';
+		container.appendChild(errorDiv);
 	}
-
-	if (reactDom?.render) {
-		reactDom.render(element, container);
-		return;
-	}
-
-	const fallbackButton = document.createElement('button');
-	fallbackButton.className = 'leetify-btn';
-	fallbackButton.type = 'button';
-	fallbackButton.innerHTML = logoSvg;
-	fallbackButton.addEventListener('click', () => {
-		window.location.href = `https://leetify.com/public/profile/${steamId}`;
-	});
-	container.appendChild(fallbackButton);
 }
 
 export async function bootLeetifyProfileButton() {
@@ -148,14 +185,17 @@ export async function bootLeetifyProfileButton() {
 	}
 
 	if (document.querySelector(`.${CONTAINER_CLASS}`)) {
+		console.info('Leetify: Container already exists');
 		return;
 	}
 
+	console.info('Leetify: Booting profile inject', href);
 	ensureStyles(document);
 
-	let rightCol = document.querySelectorAll('.profile_rightcol');
+	let rightCol: any = document.querySelectorAll('.profile_rightcol');
 	if (rightCol.length === 0) {
-		rightCol = await Millennium.findElement(document, '.profile_rightcol');
+		const found = await Millennium.findElement(document, '.profile_rightcol');
+		rightCol = found.length !== undefined ? found : [found];
 	}
 
 	if (rightCol.length === 0) {
@@ -173,14 +213,48 @@ export async function bootLeetifyProfileButton() {
 		return;
 	}
 
-	const steamId = await fetchSteamId(profileUrl);
+	const steamId = await resolveSteamId(profileUrl);
 	if (!steamId) {
+		const errorDiv = document.createElement('div');
+		errorDiv.style.padding = '10px';
+		errorDiv.style.color = '#d9534f';
+		errorDiv.textContent = 'Leetify Extension: Failed to resolve SteamID for this profile.';
+		rightCol[0].insertBefore(errorDiv, rightCol[0].children[1] ?? null);
 		return;
 	}
 
+	console.info('Leetify: Resolved SteamID', steamId);
 	const statsContainer = document.createElement('div');
 	statsContainer.className = `account-row ${CONTAINER_CLASS}`;
 
 	renderButton(statsContainer, steamId);
 	rightCol[0].insertBefore(statsContainer, rightCol[0].children[1] ?? null);
+
+	let leftCol: any = document.querySelectorAll('.profile_leftcol');
+	if (leftCol.length === 0) {
+		try {
+			const found = await Millennium.findElement(document, '.profile_leftcol');
+			leftCol = found.length !== undefined ? found : [found];
+		} catch (e) {
+			console.warn('Leetify: .profile_leftcol not found', e);
+		}
+	}
+
+	if (leftCol.length > 0 && !leftCol[0].querySelector('.leetify-stats-wrapper')) {
+		const statsWrapper = document.createElement('div');
+		statsWrapper.className = 'leetify-stats-wrapper';
+		// Insert at the very top of the left column
+		leftCol[0].insertBefore(statsWrapper, leftCol[0].firstChild);
+		renderStats(statsWrapper, steamId);
+		console.info('Leetify: Stats rendered in left column');
+		return;
+	}
+
+	if (!rightCol[0].querySelector('.leetify-stats-wrapper')) {
+		const statsWrapper = document.createElement('div');
+		statsWrapper.className = 'leetify-stats-wrapper';
+		rightCol[0].insertBefore(statsWrapper, statsContainer.nextSibling);
+		renderStats(statsWrapper, steamId);
+		console.info('Leetify: Stats rendered in right column');
+	}
 }

@@ -3,6 +3,12 @@
 	"name": "leetify-extension",
 	"common_name": "Leetify Extension",
 	"description": "A Millennium plugin that adds Leetify integration to Steam profiles.",
-	"version": "1.0.0",
-	"backendType": "lua"
+	"version": "2.0.0",
+	"backendType": "lua",
+	"data": {
+		"leetifyApiKey": {
+			"type": "string",
+			"default": ""
+		}
+	}
 }

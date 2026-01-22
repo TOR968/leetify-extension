@@ -20,11 +20,6 @@ jobs:
               with:
                   token: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Setup Python
-              uses: actions/setup-python@v5
-              with:
-                  python-version: '3.12'
-
             - name: Install pnpm
               uses: pnpm/action-setup@v2
               with:
@@ -38,8 +33,7 @@ jobs:
 
             - name: Install dependencies
               run: |
-                  pnpm install --no-frozen-lockfile
-                  pip install -r requirements.txt
+                  pnpm install --frozen-lockfile
 
             - name: Run Semantic Release
               run: npx semantic-release

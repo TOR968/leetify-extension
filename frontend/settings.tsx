@@ -1,16 +1,45 @@
 import { BindPluginSettings } from '@steambrew/client';
 
-type CheckBox = true | false;
-type EnumerateInternal<N extends number, Acc extends number[] = []> = Acc['length'] extends N ? Acc[number] : EnumerateInternal<N, [...Acc, Acc['length']]>;
-type Enumerate<Min extends number, Max extends number> = Exclude<EnumerateInternal<Max>, EnumerateInternal<Min>> | Max;
-type NumberTextInput<Min extends number, Max extends number> = Min | Enumerate<Min, Max>;
-type DropDown<T extends readonly any[]> = T[number];
+export const PLUGIN_NAME = 'leetify-extension';
 
 interface SettingsProps {
-	doFrontEndCall: CheckBox;
-	overrideWebkitDocument: CheckBox;
-	numberTextInput: NumberTextInput<1, 100>;
-	frontEndMessage: DropDown<['hello', 'hi', 'hello again', false, 69]>;
+	leetifyApiKey: string;
 }
 
 export let PluginSettings: SettingsProps = BindPluginSettings();
+
+export const readSettingsApiKey = () => {
+	try {
+		const value = (PluginSettings as unknown as { leetifyApiKey?: string } | undefined)?.leetifyApiKey;
+		return typeof value === 'string' ? value : '';
+	} catch (e) {
+		console.warn('Leetify Extension: Failed to read from PluginSettings', e);
+		return '';
+	}
+};
+
+export const writeSettingsApiKey = async (value: string) => {
+	// Method 1: Try Backend Storage (Robust)
+	try {
+		await Millennium.callServerMethod(PLUGIN_NAME, 'save_api_key', value);
+	} catch (backendError) {
+		console.error('Leetify [Settings]: Backend save failed:', backendError);
+	}
+
+	// Method 2: Try PluginSettings (Standard)
+	try {
+		const settings = PluginSettings as unknown as { leetifyApiKey?: string } | undefined;
+		if (settings) {
+			try {
+				settings.leetifyApiKey = value;
+				return true;
+			} catch (assignmentError) {
+				return false;
+			}
+		}
+		return false;
+	} catch (e) {
+		console.warn('Leetify [Settings]: PluginSettings write failed (non-critical, using localStorage/backend).', e);
+		return false;
+	}
+};

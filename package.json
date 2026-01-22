@@ -3,8 +3,8 @@
     "dev": "millennium-ttc --build dev",
     "watch": "nodemon --watch webkit --watch frontend --watch backend --watch types --ext ts,tsx,js,jsx,lua,json --exec \"millennium-ttc --build dev\"",
     "build": "millennium-ttc --build prod",
-    "sync-version": "npx tsx scripts/sync-version.ts 1.0.0",
-    "release": "npx tsx scripts/build-plugin.ts 1.0.0"
+    "sync-version": "npx tsx scripts/sync-version.ts 2.0.0",
+    "release": "npx tsx scripts/build-plugin.ts 2.0.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
@@ -13,8 +13,9 @@
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^12.0.2",
     "@semantic-release/release-notes-generator": "^14.1.0",
-    "@types/node": "^25.0.9",
-    "@types/react": "^19.2.8",
+    "@steambrew/ttc": "^2.8.7",
+    "@types/node": "^25.0.10",
+    "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
     "archiver": "^7.0.1",
     "nodemon": "^3.1.11",
@@ -30,9 +31,7 @@
   "author": "Leetify Extension Team",
   "license": "MIT",
   "dependencies": {
-    "@steambrew/api": "^5.8.4",
     "@steambrew/client": "^5.8.4",
-    "@steambrew/ttc": "^2.8.7",
     "@steambrew/webkit": "^5.8.4",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
