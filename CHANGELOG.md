@@ -1,3 +1,13 @@
+# [2.0.0](https://github.com/TOR968/leetify-extension/compare/v1.0.0...v2.0.0) (2026-01-22)
+
+
+* feat!: Add Leetify stats feature and assets ([04aa0c3](https://github.com/TOR968/leetify-extension/commit/04aa0c386f2a37330950fab6305c68d1a87b13a1))
+
+
+### BREAKING CHANGES
+
+* Introduces Leetify badge icons, example stats JSON, and a new frontend component for displaying Leetify stats. Updates backend to support API key storage and retrieval. Cleans up workflow and TypeScript declarations, and removes unused global.d.ts.
+
 # 1.0.0 (2025-09-03)
 
 
