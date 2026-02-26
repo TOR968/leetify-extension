@@ -1,4 +1,4 @@
-import { BindPluginSettings } from '@steambrew/client';
+import { BindPluginSettings, callable } from '@steambrew/client';
 
 export const PLUGIN_NAME = 'leetify-extension';
 
@@ -21,7 +21,8 @@ export const readSettingsApiKey = () => {
 export const writeSettingsApiKey = async (value: string) => {
 	// Method 1: Try Backend Storage (Robust)
 	try {
-		await Millennium.callServerMethod(PLUGIN_NAME, 'save_api_key', value);
+		const saveApiKey = callable<[{ key: string }], boolean>('save_api_key');
+		await saveApiKey({ key: value });
 	} catch (backendError) {
 		console.error('Leetify [Settings]: Backend save failed:', backendError);
 	}

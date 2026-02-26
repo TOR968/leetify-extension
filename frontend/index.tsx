@@ -1,7 +1,7 @@
-import { definePlugin, TextField } from '@steambrew/client';
+import { callable, definePlugin, TextField } from '@steambrew/client';
 import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { readSettingsApiKey, writeSettingsApiKey, PLUGIN_NAME } from './settings';
+import { readSettingsApiKey, writeSettingsApiKey } from './settings';
 
 const SettingsPanel = () => {
 	const envApiKey = (import.meta as ImportMeta).env?.LEETIFY_API_KEY ?? '';
@@ -11,7 +11,8 @@ const SettingsPanel = () => {
 	const [status, setStatus] = useState('');
 
 	useEffect(() => {
-		Millennium.callServerMethod(PLUGIN_NAME, 'read_api_key')
+		const readApiKey = callable<[], string>('read_api_key');
+		readApiKey()
 			.then((backendKey) => {
 				if (backendKey && backendKey !== apiKey) {
 					setApiKey(backendKey);

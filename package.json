@@ -11,15 +11,15 @@
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^12.0.2",
+    "@semantic-release/github": "^12.0.6",
     "@semantic-release/release-notes-generator": "^14.1.0",
-    "@steambrew/ttc": "^2.8.7",
-    "@types/node": "^25.0.10",
-    "@types/react": "^19.2.9",
+    "@steambrew/ttc": "^3.2.3",
+    "@types/node": "^25.3.2",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "archiver": "^7.0.1",
-    "nodemon": "^3.1.11",
-    "semantic-release": "^25.0.2",
+    "nodemon": "^3.1.14",
+    "semantic-release": "^25.0.3",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
@@ -33,7 +33,7 @@
   "dependencies": {
     "@steambrew/client": "^5.8.4",
     "@steambrew/webkit": "^5.8.4",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3"
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
   }
 }

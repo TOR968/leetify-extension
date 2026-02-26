@@ -13,7 +13,6 @@ interface ImportMeta {
 }
 
 var Millennium: {
-	callServerMethod: (pluginName: string, methodName: string, ...params: any[]) => Promise<any>;
 	findElement: (doc: Document, selector: string) => Promise<any>;
 };
 

@@ -1,4 +1,5 @@
 /// <reference path="./declarations.d.ts" />
+import { callable } from '@steambrew/webkit';
 import { useEffect, useState } from 'react';
 import { PluginSettings } from '../webkit/settings';
 const leetifyBadgeBase64 =
@@ -250,8 +251,6 @@ function ensureStatsStyles(doc: Document) {
 	doc.head?.appendChild(style);
 }
 
-const PLUGIN_NAME = 'leetify-extension';
-
 export function LeetifyStats({ steamId }: LeetifyStatsProps) {
 	const [fullProfile, setFullProfile] = useState<LeetifyExtendedProfile | null>(null);
 	const [loading, setLoading] = useState(true);
@@ -264,7 +263,8 @@ export function LeetifyStats({ steamId }: LeetifyStatsProps) {
 	}, []);
 
 	useEffect(() => {
-		Millennium.callServerMethod(PLUGIN_NAME, 'read_api_key')
+		const readApiKey = callable<[], string>('read_api_key');
+		readApiKey()
 			.then((key) => {
 				const normalized = typeof key === 'string' ? key.trim() : '';
 				if (!normalized) return;
