@@ -1,7 +1,6 @@
 import { Millennium } from '@steambrew/webkit';
 import { createRoot } from 'react-dom/client';
 import { LeetifyButton } from './leetify-button';
-import { LeetifyStats } from './leetify-stats';
 
 const CONTAINER_CLASS = 'leetify-extension-container';
 const PROFILE_URL_PATTERN = /steamcommunity\.com\/(id|profiles)\//;
@@ -163,20 +162,6 @@ function renderButton(container: Element, steamId: string) {
 	}
 }
 
-function renderStats(container: Element, steamId: string) {
-	try {
-		const root = createRoot(container);
-		root.render(<LeetifyStats steamId={steamId} />);
-	} catch (error) {
-		console.error('Leetify: Failed to render stats with React', error);
-
-		const errorDiv = document.createElement('div');
-		errorDiv.style.padding = '10px';
-		errorDiv.style.color = 'red';
-		errorDiv.textContent = 'Leetify Extension Error: Failed to render stats.';
-		container.appendChild(errorDiv);
-	}
-}
 
 export async function bootLeetifyProfileButton() {
 	const href = window.location.href ?? '';
@@ -224,37 +209,10 @@ export async function bootLeetifyProfileButton() {
 	}
 
 	console.info('Leetify: Resolved SteamID', steamId);
-	const statsContainer = document.createElement('div');
-	statsContainer.className = `account-row ${CONTAINER_CLASS}`;
+	const buttonContainer = document.createElement('div');
+	buttonContainer.className = `account-row ${CONTAINER_CLASS}`;
 
-	renderButton(statsContainer, steamId);
-	rightCol[0].insertBefore(statsContainer, rightCol[0].children[1] ?? null);
+	renderButton(buttonContainer, steamId);
+	rightCol[0].insertBefore(buttonContainer, rightCol[0].children[1] ?? null);
 
-	let leftCol: any = document.querySelectorAll('.profile_leftcol');
-	if (leftCol.length === 0) {
-		try {
-			const found = await Millennium.findElement(document, '.profile_leftcol');
-			leftCol = found.length !== undefined ? found : [found];
-		} catch (e) {
-			console.warn('Leetify: .profile_leftcol not found', e);
-		}
-	}
-
-	if (leftCol.length > 0 && !leftCol[0].querySelector('.leetify-stats-wrapper')) {
-		const statsWrapper = document.createElement('div');
-		statsWrapper.className = 'leetify-stats-wrapper';
-		// Insert at the very top of the left column
-		leftCol[0].insertBefore(statsWrapper, leftCol[0].firstChild);
-		renderStats(statsWrapper, steamId);
-		console.info('Leetify: Stats rendered in left column');
-		return;
-	}
-
-	if (!rightCol[0].querySelector('.leetify-stats-wrapper')) {
-		const statsWrapper = document.createElement('div');
-		statsWrapper.className = 'leetify-stats-wrapper';
-		rightCol[0].insertBefore(statsWrapper, statsContainer.nextSibling);
-		renderStats(statsWrapper, steamId);
-		console.info('Leetify: Stats rendered in right column');
-	}
 }

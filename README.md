@@ -13,10 +13,6 @@ Before installing this plugin, ensure you have:
 ![Example](./assets/images/example.png)
 ![ExampleGif](./assets/gifs/example.gif)
 
-> **⚠️ Only with a valid [Leetify API key](https://leetify.com/app/developer) will you see statistics.**
-
-![Stats](./assets/images/stats.png)
-![Example of a Leetify profile with statistics.](<assets/gifs/stat example.gif>)
 
 ---
 
@@ -36,11 +32,6 @@ Before installing this plugin, ensure you have:
     - Paste the Plugin ID into the installer
     - Click **Install**
     - Restart Steam when prompted
-    - Add [Leetfy API key](https://leetify.com/app/developer) to the plugin settings to enable full functionality
-      - Go to **Millennium Library Manager** → **Leetify Extension**
-      - ![Paste your Leetify API key into the field](assets/images/api-key.png)
-      - Click **Save**
-      - Restart Steam once more
 
 ### Method 2: Build from Source
 

@@ -13,15 +13,15 @@
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^12.0.6",
     "@semantic-release/release-notes-generator": "^14.1.0",
-    "@steambrew/ttc": "^3.2.3",
-    "@types/node": "^25.3.2",
+    "@steambrew/ttc": "^3.3.6",
+    "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "archiver": "^7.0.1",
     "nodemon": "^3.1.14",
     "semantic-release": "^25.0.3",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "type": "module",
   "name": "leetify-extension",
@@ -31,9 +31,9 @@
   "author": "Leetify Extension Team",
   "license": "MIT",
   "dependencies": {
-    "@steambrew/client": "^5.8.4",
+    "@steambrew/client": "^5.8.5",
     "@steambrew/webkit": "^5.8.4",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
   }
 }

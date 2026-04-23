@@ -1,83 +1,4 @@
-import { callable, definePlugin, TextField } from '@steambrew/client';
-import { useEffect, useState } from 'react';
-import type { ChangeEvent } from 'react';
-import { readSettingsApiKey, writeSettingsApiKey } from './settings';
-
-const SettingsPanel = () => {
-	const envApiKey = (import.meta as ImportMeta).env?.LEETIFY_API_KEY ?? '';
-	const storedApiKey = readSettingsApiKey() || localStorage.getItem('leetifyApiKey') || envApiKey;
-
-	const [apiKey, setApiKey] = useState(storedApiKey);
-	const [status, setStatus] = useState('');
-
-	useEffect(() => {
-		const readApiKey = callable<[], string>('read_api_key');
-		readApiKey()
-			.then((backendKey) => {
-				if (backendKey && backendKey !== apiKey) {
-					setApiKey(backendKey);
-				}
-			})
-			.catch((err) => console.error('Leetify [SettingsPanel]: Failed to read from backend:', err));
-	}, []);
-
-	useEffect(() => {
-		const currentSettings = readSettingsApiKey();
-		if (!currentSettings && storedApiKey) {
-			writeSettingsApiKey(storedApiKey);
-		}
-	}, [storedApiKey]);
-
-	const handleApiKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
-		setApiKey(event.target.value);
-		setStatus('');
-	};
-
-	const handleSave = async () => {
-		if (apiKey) {
-			localStorage.setItem('leetifyApiKey', apiKey);
-		} else {
-			localStorage.removeItem('leetifyApiKey');
-		}
-
-		await writeSettingsApiKey(apiKey);
-
-		setStatus('Saved!');
-		setTimeout(() => setStatus(''), 2000);
-	};
-
-	return (
-		<div style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '8px 0' }}>
-			<TextField
-				label="Leetify API Key"
-				value={apiKey}
-				onChange={handleApiKeyChange}
-				description="Paste your API key or set LEETIFY_API_KEY in .env"
-				bIsPassword={true}
-			/>
-			<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-				<button
-					onClick={handleSave}
-					style={{
-						padding: '8px 16px',
-						backgroundColor: '#1a9fff',
-						color: 'white',
-						border: 'none',
-						borderRadius: '2px',
-						cursor: 'pointer',
-						fontSize: '14px',
-						fontWeight: 500,
-					}}
-					onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#1589da')}
-					onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#1a9fff')}
-				>
-					Save
-				</button>
-				{status && <span style={{ color: '#66c0f4', fontSize: '13px' }}>{status}</span>}
-			</div>
-		</div>
-	);
-};
+import { definePlugin } from '@steambrew/client';
 
 const LeetifyIcon = () => (
 	<svg style={{ height: '1em' }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 629 127">
@@ -103,6 +24,5 @@ export default definePlugin(() => {
 		name: 'leetify-extension',
 		title: 'Leetify Extension',
 		icon: <LeetifyIcon />,
-		content: <SettingsPanel />,
 	};
 });
