@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/TOR968/leetify-extension/compare/v2.0.0...v2.1.0) (2026-04-23)
+
+
+### Features
+
+* delete stats block ([cb4d4aa](https://github.com/TOR968/leetify-extension/commit/cb4d4aad4ca4d4d67c6c08a0b1a498937e593f3c))
+
 # [2.0.0](https://github.com/TOR968/leetify-extension/compare/v1.0.0...v2.0.0) (2026-01-22)
 
 
