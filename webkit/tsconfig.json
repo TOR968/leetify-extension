@@ -4,7 +4,7 @@
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"jsx": "react-jsx",
-		"types": ["react", "react-dom"]
+		"types": ["react"]
 	},
 	"include": ["."],
 	"exclude": ["node_modules", "../frontend"]

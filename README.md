@@ -48,7 +48,7 @@ cd leetify-extension
 
 ```bash
 # Install project dependencies
-pnpm install
+bun install
 ```
 
 #### Step 3: Build the Plugin
@@ -56,13 +56,13 @@ pnpm install
 **For development:**
 
 ```bash
-pnpm run dev
+bun run dev
 ```
 
 **For production:**
 
 ```bash
-pnpm run build
+bun run build
 ```
 
 #### Step 4: Install to Steam
@@ -71,7 +71,7 @@ pnpm run build
 
 ```bash
 # Windows
-copy /R . "C:\Program Files (x86)\Steam\plugins\leetify-extension"
+copy /R . "C:\Program Files (x86)\Steam\millennium\plugins\leetify-extension"
 
 # Linux
 cp -r . ~/.local/share/millennium/plugins/leetify-extension
