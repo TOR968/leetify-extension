@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/TOR968/leetify-extension/compare/v2.1.0...v2.2.0) (2026-06-17)
+
+
+### Features
+
+* rewrite injection to use CDP for Millennium v3.2.0+ compatibility ([745de2f](https://github.com/TOR968/leetify-extension/commit/745de2f689bad56d9b5d260a9f96c230b4a39c12))
+
 # [2.1.0](https://github.com/TOR968/leetify-extension/compare/v2.0.0...v2.1.0) (2026-04-23)
 
 
