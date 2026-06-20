@@ -1,3 +1,10 @@
+## [2.2.1](https://github.com/TOR968/leetify-extension/compare/v2.2.0...v2.2.1) (2026-06-20)
+
+
+### Bug Fixes
+
+* webkit-primary injection with CDP fallback, injection-mode + browser settings ([ad7f57a](https://github.com/TOR968/leetify-extension/commit/ad7f57a192d43b9259921aab32765ee2de90c6c3))
+
 # [2.2.0](https://github.com/TOR968/leetify-extension/compare/v2.1.0...v2.2.0) (2026-06-17)
 
 

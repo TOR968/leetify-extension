@@ -24,7 +24,7 @@
   },
   "type": "module",
   "name": "leetify-extension",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "A Millennium plugin that adds Leetify integration to Steam profiles",
   "main": "./frontend/index.tsx",
   "author": "Leetify Extension Team",
