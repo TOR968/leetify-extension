@@ -13,6 +13,8 @@ Before installing this plugin, ensure you have:
 ![Example](./assets/images/example.png)
 ![ExampleGif](./assets/gifs/example.gif)
 
+### Millennium Library Manager
+![Example](./assets/images/settings.png)
 
 ---
 

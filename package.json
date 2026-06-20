@@ -14,7 +14,7 @@
     "@semantic-release/github": "^12.0.8",
     "@semantic-release/release-notes-generator": "^14.1.1",
     "@steambrew/ttc": "^3.3.7",
-    "@types/node": "^25.9.3",
+    "@types/node": "^25.9.4",
     "@types/react": "^19.2.17",
     "archiver": "^7.0.1",
     "nodemon": "^3.1.14",
@@ -31,6 +31,7 @@
   "license": "MIT",
   "dependencies": {
     "@steambrew/client": "^5.8.5",
+    "@steambrew/webkit": "^5.8.4",
     "react": "^19.2.7"
   }
 }
