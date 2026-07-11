@@ -1,3 +1,10 @@
+## [2.2.2](https://github.com/TOR968/leetify-extension/compare/v2.2.1...v2.2.2) (2026-07-11)
+
+
+### Bug Fixes
+
+* address Plugin Database review feedback ([d523851](https://github.com/TOR968/leetify-extension/commit/d523851b163527eb728ec71c5c1d502564a73924))
+
 ## [2.2.1](https://github.com/TOR968/leetify-extension/compare/v2.2.0...v2.2.1) (2026-06-20)
 
 
