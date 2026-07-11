@@ -1,29 +1,29 @@
-export function leetifyInjectMain(openExternal: boolean, injector?: string) {
+const STEAMID64_BASE = BigInt('76561197960265728');
+
+async function getSteamId() {
+	const win = window as any;
+	const candidates = [win.g_rgProfileData?.steamid64, win.g_rgProfileData?.steamid];
+	for (const v of candidates) {
+		if (typeof v === 'string' && v !== '0' && v.trim()) return v.trim();
+	}
+	const miniId = document.querySelector('[data-miniprofile]')?.getAttribute('data-miniprofile');
+	if (miniId && miniId !== '0') {
+		try { return (STEAMID64_BASE + BigInt(miniId)).toString(); } catch { }
+	}
+	try {
+		const xmlUrl = location.href.replace(/[?#].*/, '').replace(/\/$/, '') + '/?xml=1';
+		const res = await fetch(xmlUrl);
+		const text = await res.text();
+		const dom = new DOMParser().parseFromString(text, 'application/xml');
+		const id = dom.querySelector('steamID64')?.textContent;
+		if (id && id !== '0') return id;
+	} catch { }
+	return null;
+}
+
+export function leetifyInjectMain(openExternal: boolean) {
 	if (document.querySelector('.leetify-extension-container')) return;
 	if (!/steamcommunity\.com\/(id|profiles)\//.test(location.href)) return;
-
-	const STEAMID64_BASE = BigInt('76561197960265728');
-
-	async function getSteamId() {
-		const win = window as any;
-		const candidates = [win.g_rgProfileData?.steamid64, win.g_rgProfileData?.steamid];
-		for (const v of candidates) {
-			if (typeof v === 'string' && v !== '0' && v.trim()) return v.trim();
-		}
-		const miniId = document.querySelector('[data-miniprofile]')?.getAttribute('data-miniprofile');
-		if (miniId && miniId !== '0') {
-			try { return (STEAMID64_BASE + BigInt(miniId)).toString(); } catch { }
-		}
-		try {
-			const xmlUrl = location.href.replace(/[?#].*/, '').replace(/\/$/, '') + '/?xml=1';
-			const res = await fetch(xmlUrl);
-			const text = await res.text();
-			const dom = new DOMParser().parseFromString(text, 'application/xml');
-			const id = dom.querySelector('steamID64')?.textContent;
-			if (id && id !== '0') return id;
-		} catch { }
-		return null;
-	}
 
 	async function inject() {
 		const col = document.querySelector('.profile_rightcol');
@@ -31,7 +31,6 @@ export function leetifyInjectMain(openExternal: boolean, injector?: string) {
 
 		const div = document.createElement('div');
 		div.className = 'account-row leetify-extension-container';
-		div.setAttribute('data-injector', injector || 'unknown');
 		col.insertBefore(div, col.children[1] ?? null);
 
 		const steamId = await getSteamId();
@@ -65,6 +64,3 @@ export function leetifyInjectMain(openExternal: boolean, injector?: string) {
 		setTimeout(() => obs.disconnect(), 15000);
 	}
 }
-
-export const buildInjectionCode = (openExternal: boolean) =>
-	`(${leetifyInjectMain.toString()})(${openExternal === false ? 'false' : 'true'}, 'cdp')`;

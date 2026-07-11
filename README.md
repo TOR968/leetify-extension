@@ -2,7 +2,7 @@
 
 A Millennium plugin that integrates Leetify data and functionality directly into the Steam client, providing enhanced Counter-Strike statistics and profile information.
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before installing this plugin, ensure you have:
 
@@ -18,7 +18,7 @@ Before installing this plugin, ensure you have:
 
 ---
 
-## 🚀 Installation Guide
+## Installation Guide
 
 ### Method 1: Millennium Plugin Installer (Recommended)
 
@@ -49,7 +49,6 @@ cd leetify-extension
 **Install Node.js dependencies:**
 
 ```bash
-# Install project dependencies
 bun install
 ```
 
@@ -84,7 +83,22 @@ cp -r . ~/Library/Application\ Support/millennium/plugins/leetify-extension
 
 ---
 
-## 🔗 Links
+## How it works
+
+The webkit bundle ([webkit/index.tsx](webkit/index.tsx)) runs inside the Steam community
+browser and injects the Leetify button with a small vanilla-DOM function
+(`leetifyInjectMain` in [webkit/inject.ts](webkit/inject.ts)). Settings are stored by a
+small Lua backend ([backend/main.lua](backend/main.lua)) and edited from the plugin's
+settings panel in the Steam client.
+
+## TypeScript type checking
+
+```bash
+npx tsc -p frontend/tsconfig.json --noEmit
+npx tsc -p webkit/tsconfig.json --noEmit
+```
+
+## Links
 
 -   [Millennium Framework](https://github.com/SteamClientHomebrew/Millennium)
 -   [Leetify](https://leetify.com)

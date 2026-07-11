@@ -1,15 +1,11 @@
 import { callable } from '@steambrew/client';
 
-export type InjectionMode = 'auto' | 'webkit' | 'cdp';
-
 export interface PluginSettings {
 	openExternal: boolean;
-	injectionMode: InjectionMode;
 }
 
 const DEFAULT_SETTINGS: PluginSettings = {
 	openExternal: false,
-	injectionMode: 'auto',
 };
 
 const GetSettingsRpc = callable<[], string>('GetSettings');
