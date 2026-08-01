@@ -1,29 +1,40 @@
 const STEAMID64_BASE = BigInt('76561197960265728');
+const STEAMID64_PATTERN = /^\d{17}$/;
+const PROFILE_HOST_PATTERN = /(^|\.)steamcommunity\.com$/;
+const PROFILE_PATH_PATTERN = /^\/(id|profiles)\//;
 
-async function getSteamId() {
+function asSteamId64(value: unknown): string | null {
+	const id = typeof value === 'string' ? value.trim() : '';
+	return STEAMID64_PATTERN.test(id) ? id : null;
+}
+
+async function getSteamId(): Promise<string | null> {
 	const win = window as any;
-	const candidates = [win.g_rgProfileData?.steamid64, win.g_rgProfileData?.steamid];
-	for (const v of candidates) {
-		if (typeof v === 'string' && v !== '0' && v.trim()) return v.trim();
+	for (const v of [win.g_rgProfileData?.steamid64, win.g_rgProfileData?.steamid]) {
+		const id = asSteamId64(v);
+		if (id) return id;
 	}
 	const miniId = document.querySelector('[data-miniprofile]')?.getAttribute('data-miniprofile');
-	if (miniId && miniId !== '0') {
-		try { return (STEAMID64_BASE + BigInt(miniId)).toString(); } catch { }
+	if (miniId && /^\d+$/.test(miniId) && miniId !== '0') {
+		try {
+			const id = asSteamId64((STEAMID64_BASE + BigInt(miniId)).toString());
+			if (id) return id;
+		} catch { }
 	}
 	try {
 		const xmlUrl = location.href.replace(/[?#].*/, '').replace(/\/$/, '') + '/?xml=1';
 		const res = await fetch(xmlUrl);
 		const text = await res.text();
 		const dom = new DOMParser().parseFromString(text, 'application/xml');
-		const id = dom.querySelector('steamID64')?.textContent;
-		if (id && id !== '0') return id;
+		return asSteamId64(dom.querySelector('steamID64')?.textContent);
 	} catch { }
 	return null;
 }
 
 export function leetifyInjectMain(openExternal: boolean) {
 	if (document.querySelector('.leetify-extension-container')) return;
-	if (!/steamcommunity\.com\/(id|profiles)\//.test(location.href)) return;
+	if (!PROFILE_HOST_PATTERN.test(location.hostname)) return;
+	if (!PROFILE_PATH_PATTERN.test(location.pathname)) return;
 
 	async function inject() {
 		const col = document.querySelector('.profile_rightcol');
@@ -43,7 +54,7 @@ export function leetifyInjectMain(openExternal: boolean) {
 			document.head?.appendChild(s);
 		}
 
-		const profileUrl = 'https://leetify.com/public/profile/' + steamId;
+		const profileUrl = 'https://leetify.com/public/profile/' + encodeURIComponent(steamId);
 		const a = document.createElement('a');
 		a.href = openExternal ? 'steam://openurl_external/' + profileUrl : profileUrl;
 		a.className = 'leetify-btn';

@@ -1,7 +1,8 @@
 import { callable } from '@steambrew/webkit';
 import { leetifyInjectMain } from './inject';
 
-const PROFILE_URL_PATTERN = /steamcommunity\.com\/(id|profiles)\//;
+const PROFILE_HOST_PATTERN = /(^|\.)steamcommunity\.com$/;
+const PROFILE_PATH_PATTERN = /^\/(id|profiles)\//;
 
 const GetSettingsRpc = callable<[], string>('GetSettings');
 
@@ -20,7 +21,8 @@ async function readSettings(): Promise<{ openExternal: boolean }> {
 }
 
 export default async function WebkitMain() {
-	if (!PROFILE_URL_PATTERN.test(location.href)) return;
+	if (!PROFILE_HOST_PATTERN.test(location.hostname)) return;
+	if (!PROFILE_PATH_PATTERN.test(location.pathname)) return;
 	const { openExternal } = await readSettings();
 	leetifyInjectMain(openExternal);
 }

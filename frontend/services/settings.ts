@@ -30,7 +30,7 @@ export function getSettings(): PluginSettings {
 	return cachedSettings;
 }
 
-export async function saveSettings(settings: PluginSettings): Promise<void> {
+export async function saveSettings(settings: PluginSettings): Promise<boolean> {
 	const previous = cachedSettings;
 	cachedSettings = settings;
 	try {
@@ -38,9 +38,12 @@ export async function saveSettings(settings: PluginSettings): Promise<void> {
 		if (res === '0') {
 			console.error('[Leetify] Backend failed to save settings');
 			cachedSettings = previous;
+			return false;
 		}
+		return true;
 	} catch (e) {
 		console.error('[Leetify] Failed to save settings:', e);
 		cachedSettings = previous;
+		return false;
 	}
 }
