@@ -1,3 +1,10 @@
+## [2.2.3](https://github.com/TOR968/leetify-extension/compare/v2.2.2...v2.2.3) (2026-08-01)
+
+
+### Bug Fixes
+
+* harden profile injection and surface settings write failures ([c135a6f](https://github.com/TOR968/leetify-extension/commit/c135a6fcfd18f3891911a6f6310ac9b6e31f2066))
+
 ## [2.2.2](https://github.com/TOR968/leetify-extension/compare/v2.2.1...v2.2.2) (2026-07-11)
 
 
